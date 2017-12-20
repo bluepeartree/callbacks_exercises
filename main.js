@@ -277,9 +277,16 @@ console.log( 'The "big spenders" are:', bigSpenders );
   - Transactions don't have 'prices', but their 'items' do!
 */
 
-var sales = transactions.filter(transaction => transaction['type']==='sale').map(items=> items)
-console.log(sales);
-var sumSales;
+var sales = transactions.filter(transaction => transaction['type']==='sale')
+var sumSales = 0;
+sales.forEach(function(sale){
+  sale['items'].forEach(function(item)
+{
+  sumSales= sumSales+item['price']
+})
+}
+)
+
 
 console.log( 'The sum of all sales is:', sumSales );
 
@@ -295,9 +302,18 @@ console.log( 'The sum of all sales is:', sumSales );
   - Make sure to include 'price' information from *all* purchases.
 */
 
-var sumPurchases;
+var sumPurchases=0;
+var purchases = transactions.filter(transaction=> transaction['type']==='purchase')
 
-console.log( 'The sum of all purhcases is:', sumPurchases );
+purchases.forEach(function(purchase){
+  purchase['items'].forEach(function(item) {
+    sumPurchases += item['price']
+  })
+}
+)
+
+
+console.log( 'The sum of all purchases is:', sumPurchases );
 
 
 // --------------------------------------------------
@@ -313,7 +329,7 @@ console.log( 'The sum of all purhcases is:', sumPurchases );
   HINT(S):
   - Unlike 'QUESTION 08' and 'QUESTION 09', here we're interested in both 'sale' and 'purchase' transactions.
 */
-var netProfit;
+var netProfit = sumSales + sumPurchases;
 
 console.log( 'The net profit is:', netProfit );
 
@@ -327,7 +343,15 @@ console.log( 'The net profit is:', netProfit );
   HINTS:
   - The result of this calculation should be a number (not an array, object, or other data type).
 */
-var mostItems;
+var countItems = [];
+
+sales.forEach(function(sale){
+  countItems.push(sale['items'].length);
+}
+)
+var mostItems = countItems.reduce(function(a,b)
+{return Math.max(a,b);
+})
 
 console.log( 'The most items sold in a single transaction is:', mostItems );
 
@@ -338,6 +362,19 @@ console.log( 'The most items sold in a single transaction is:', mostItems );
 /*
   Calculate the sum of the 'purchase' with the fewest items.
 */
-var sumOfSmallestPurchase;
+var countPurchases = [];
+
+purchases.forEach(function(purchase)
+{countPurchases.push(purchase['items'].length)})
+
+var leastPurchases = countPurchases.reduce(function(a,b)
+{return Math.min(a,b);})
+
+var smallestPurchase = purchases[countPurchases.indexOf(leastPurchases)]
+var sumOfSmallestPurchase = 0;
+smallestPurchase['items'].forEach(function(item)
+{
+  sumOfSmallestPurchase +=item['price'];
+})
 
 console.log( 'The sum of the smallest purchase is:', sumOfSmallestPurchase );
